@@ -1,2 +1,2 @@
-# sol_etl
-SolanaBeach api to BigQuery ETL
+# Sol_ETL
+SolanaBeach API to BigQuery ETL
