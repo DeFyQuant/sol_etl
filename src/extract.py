@@ -50,20 +50,19 @@ class SolBlock(object):
   '''
   Class for solana block data
   '''
-  def __init__(self):
-    self.blocknumber: int
-    self.blockhash: str
-    self.previousblockhash: str
-    self.parentslot: int
-    self.blocktime_abs: float
-    self.blocktime_rel: float
-    self.txcount: int
-    self.failedtxs: int
-    self.totalfees : float
-    self.instructions: int
-    self.sucessfultxs: int
-    self.totalvaluemoved: float
-    self.innerinstructions: int
+  blocknumber: int = None
+  blockhash: str = None
+  previousblockhash: str = None
+  parentslot: int = None
+  blocktime_abs: float = None
+  blocktime_rel: float = None
+  txcount: int = None
+  failedtxs: int = None
+  totalfees : float = None
+  instructions: int = None
+  sucessfultxs: int = None
+  totalvaluemoved: float = None
+  innerinstructions: int = None
 
 def transform_json(response:json, start_number:float=-float('inf')):
   '''
@@ -104,6 +103,17 @@ def transform_json(response:json, start_number:float=-float('inf')):
 
 # BLOCKS TO APPEND
 def create_chain(start_number:int):
+  '''
+  Creates chain of all recent SolBlocks given a starting number
+  
+  Args:
+    start_number(int): starting block number
+    
+  Return:
+    chain(list): all blocks since start number
+    start_number(int): starting block number
+    end_number(int): ending block number
+  '''
   latest_block = _solana_api(limit = 1)
   end_number = latest_block[0]['blocknumber']
   init_end_number = end_number
@@ -117,3 +127,18 @@ def create_chain(start_number:int):
     end_number = start_roll_number
 
   return chain, start_number, end_number
+
+def staging_table(filename:str = 'temp.csv', chain:list = None):
+    '''
+    create temporary table with block data
+    
+    Args:
+        filename(str): name of temporary csv file
+        chain(list): list of blocks
+    
+    '''
+    with open(filename, 'w') as csv_file:
+        wr = csv.DictWriter(csv_file, fieldnames=chain[0].__dict__.keys())
+        wr.writeheader()
+        for block in chain:
+          wr.writerow(block.__dict__)
