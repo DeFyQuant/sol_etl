@@ -3,13 +3,10 @@ import json
 import csv
 from dataclasses import dataclass
 import os
-
-#from __future__ import print_function
-
 import logging
 
 logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger()#.setLevel(logging.DEBUG)
 
 url = 'https://api.solanabeach.io/v1/'
 
@@ -44,8 +41,6 @@ class SolBlock(object):
 class StagingTable():
     '''
     Class for temporary table with block data
-    
- 
     
     '''
     def __init__(self, filename:str = 'temp.csv', token:str=None, start_number:int=None):
